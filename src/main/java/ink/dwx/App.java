@@ -1,7 +1,9 @@
 package ink.dwx;
 
-import de.pi3g.pi.oled.Font;
-import de.pi3g.pi.oled.OLEDDisplay;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.i2c.I2CBus;
+import com.pi4j.io.i2c.I2CFactory;
 
 import java.io.IOException;
 
@@ -10,13 +12,13 @@ import java.io.IOException;
  */
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        OLEDDisplay display = null;
         try {
-            display = new OLEDDisplay();
-            display.drawStringCentered("Hello World!", Font.FONT_5X8, 25, true);
-            display.update();
-        } catch (IOException e) {
+            GpioController gpio = GpioFactory.getInstance();
+            I2CBus i2c = I2CFactory.getInstance(1);
+            Display display = new Display(13, 6, gpio, i2c, 0x3c);
+            display.data(10);
+            display.display();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -19,7 +19,6 @@ public class App {
             display.clearImage();
             display.displayString("学识野路子");
             display.displayImage();
-            display.display();
         } catch (Exception e) {
             e.printStackTrace();
         }

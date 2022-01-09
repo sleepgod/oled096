@@ -59,10 +59,10 @@ public class Display {
      * @param i2c     I2C object
      * @param address Display address
      * @param rstPin  Reset pin
-     * @see GpioFactory#getInstance() GpioController instance factory
-     * @see com.pi4j.io.i2c.I2CFactory#getInstance(int) I2C bus factory
      * @throws ReflectiveOperationException Thrown if I2C handle is not accessible
      * @throws IOException                  Thrown if the bus can't return device for specified address
+     * @see GpioFactory#getInstance() GpioController instance factory
+     * @see com.pi4j.io.i2c.I2CFactory#getInstance(int) I2C bus factory
      */
     public Display(int width, int height, GpioController gpio, I2CBus i2c, int address, Pin rstPin) throws ReflectiveOperationException, IOException {
         this(width, height, true, gpio, rstPin);
@@ -179,6 +179,7 @@ public class Display {
 
     /**
      * Turns on command mode and sends command
+     *
      * @param command Command to send. Should be in short range.
      */
     public void command(int command) {
@@ -196,6 +197,7 @@ public class Display {
 
     /**
      * Turns on data mode and sends data
+     *
      * @param data Data to send. Should be in short range.
      */
     public void data(int data) {
@@ -213,6 +215,7 @@ public class Display {
 
     /**
      * Turns on data mode and sends data array
+     *
      * @param data Data array
      */
     public void data(byte[] data) {
@@ -232,14 +235,34 @@ public class Display {
 
     /**
      * Begin with SWITCHCAPVCC VCC mode
+     *
      * @see Constants#SSD1306_SWITCHCAPVCC
      */
     public void begin() {
         this.begin(Constants.SSD1306_SWITCHCAPVCC);
     }
 
+    public void clearImage() {
+        this.graphics.setBackground(new Color(0, 0, 0, 0));
+        this.graphics.clearRect(0, 0, img.getWidth(), img.getHeight());
+    }
+
+    /**
+     * Clears the screen and displays the string sent in, adding new lines as needed
+     *
+     * @param data
+     */
+    public void displayString(String... data) {
+        clearImage();
+        for (int i = 0; i < data.length; i++) {
+            graphics.drawString(data[i], 0, Constants.STRING_HEIGHT * (i + 1));
+        }
+        displayImage();
+    }
+
     /**
      * Begin with specified VCC mode (can be SWITCHCAPVCC or EXTERNALVCC)
+     *
      * @param vccState VCC mode
      * @see Constants#SSD1306_SWITCHCAPVCC
      * @see Constants#SSD1306_EXTERNALVCC
@@ -293,6 +316,7 @@ public class Display {
 
     /**
      * Sets the display contract. Apparently not really working.
+     *
      * @param contrast Contrast
      */
     public void setContrast(byte contrast) {
@@ -302,6 +326,7 @@ public class Display {
 
     /**
      * Sets if the backlight should be dimmed
+     *
      * @param dim Dim state
      */
     public void dim(boolean dim) {
@@ -318,6 +343,7 @@ public class Display {
 
     /**
      * Sets if the display should be inverted
+     *
      * @param invert Invert state
      */
     public void invertDisplay(boolean invert) {
@@ -382,8 +408,9 @@ public class Display {
 
     /**
      * Sets one pixel in the current buffer
-     * @param x X position
-     * @param y Y position
+     *
+     * @param x     X position
+     * @param y     Y position
      * @param white White or black pixel
      * @return True if the pixel was successfully set
      */
@@ -403,6 +430,7 @@ public class Display {
 
     /**
      * Copies AWT image contents to buffer. Calls display()
+     *
      * @see Display#display()
      */
     public synchronized void displayImage() {
@@ -419,6 +447,7 @@ public class Display {
 
     /**
      * Sets internal buffer
+     *
      * @param buffer New used buffer
      */
     public void setBuffer(byte[] buffer) {
@@ -427,8 +456,9 @@ public class Display {
 
     /**
      * Sets one byte in the buffer
+     *
      * @param position Position to set
-     * @param value Value to set
+     * @param value    Value to set
      */
     public void setBufferByte(int position, byte value) {
         this.buffer[position] = value;
@@ -436,7 +466,8 @@ public class Display {
 
     /**
      * Sets internal AWT image to specified one.
-     * @param img BufferedImage to set
+     *
+     * @param img            BufferedImage to set
      * @param createGraphics If true, createGraphics() will be called on the image and the result will be saved
      *                       to the internal Graphics field accessible by getGraphics() method
      */
@@ -450,6 +481,7 @@ public class Display {
 
     /**
      * Returns internal AWT image
+     *
      * @return BufferedImage
      */
     public BufferedImage getImage() {
@@ -459,6 +491,7 @@ public class Display {
     /**
      * Returns Graphics object which is associated to current AWT image,
      * if it wasn't set using setImage() with false createGraphics parameter
+     *
      * @return Graphics2D object
      */
     public Graphics2D getGraphics() {

@@ -5,8 +5,6 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CFactory;
 
-import java.io.IOException;
-
 /**
  * Hello world!
  */

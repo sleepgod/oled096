@@ -60,7 +60,6 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <addClasspath>true</addClasspath>
                                 <mainClass>ink.dwx.App</mainClass>
                             </manifest>
                         </archive>
